@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Promised Land Christian Center - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Merriweather:wght@700&family=Cinzel:wght@600&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=EB+Garamond:wght@600&family=Lora:wght@700&family=Forum&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <header>
+        <button class="mobile-menu-btn">☰</button>
+
+        <nav class="desktop-nav">
+            <div class="logo"><a href="index.html">
+                    <img src="images/mee.png" alt="PLCCC Logo" class="logo">
+                </a>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="sermon.html">Sermons</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="Learnmore.html">Learn More</a></li>
+                <li><a href="new-here.html">New Here</a></li>
+                <li><a href="give.html">Give</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="mobile-nav-overlay"></div>
+    <nav class="mobile-nav">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="sermon.html">Sermons</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="Learnmore.html">Learn More</a></li>
+            <li><a href="new-here.html">New Here</a></li>
+            <li><a href="give.html">Give</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+    <section class="hero">
+        <div class="hero-content">
+            <h1 style="font-family:'Libre Baskerville', serif; font-size:46px; font-weight:700; color:#ffffff;">
+                Welcome to Promised Land Christian Center
+            </h1>
+            <h2 style="font-family:'Montserrat', sans-serif; font-size:18px; font-style:italic; color:#f1f1f1;">
+                “Changing Hearts, Transforming Lives”
+            </h2>
+            <a href="new-here.html" class="btn">I'm new here</a>
+        </div>
+    </section>
+    <div class="container" id="church-section">
+        <section class="service-times">
+            <h2>Our Church Programmes</h2>
+            <p>Explore our church programmes designed to nurture faith, encourage fellowship and strengthen our walk
+                with Christ.</p>
+            <a href="services.html" class="btn">View all Church programmes</a>
+        </section>
+
+        <section>
+            <h2>Our Church Events</h2>
+            <p>Explore opportunities to worship, fellowship, and serve God through our church events. Stay informed
+                about upcoming events and feel free to inquire for details.
+            </p>
+            <a href="events.html" class="btn">View All Events</a>
+        </section>
+
+        <section>
+            <h2>Contact Us</h2>
+            <p>You can reach us directly at 0780914274 or 0744836784, or email us at promisedlandchc@gmail.com
+                . You can also stay connected by following us on our social media channels.
+            </p>
+            <a href="contact.html" class="btn">Connect and Grow</a>
+        </section>
+    </div>
+    <div class="session">
+        <h1>Make your Counselling, Baptism, Marriage and Dedication bookings using the form below</h1>
+        <p>We value your privacy. All information you share with us will be kept safe and strictly confidential
+        </p>
+        <p>Kindly note that our counselling sessions take place every Tuesday</p>
+        <form id="bookingForm" method="POST" action="submit_booking.php">
+            <div class="form-group">
+                <label for="serviceType">Service Type</label>
+                <select id="serviceType" name="serviceType" required>
+                    <option value="">Select a service</option>
+                    <option value="counselling">Counselling</option>
+                    <option value="baptism">Baptism</option>
+                    <option value="marriage">Marriage</option>
+                    <option value="dedication">Dedication</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+            <div class="form-group" id="childNameGroup">
+                <label for="childName">Child's Name:</label>
+                <input type="text" id="childName" name="childName">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+            </div>
+
+            <div class="form-group" id="dateGroup">
+                <label for="preferredDate">Preferred Date</label>
+                <input type="date" id="preferredDate" name="preferredDate">
+            </div>
+
+            <div class="form-group">
+                <label for="preferredTime">Preferred Time</label>
+                <select id="preferredTime" name="preferredTime" required>
+                    <option value="">Select a time</option>
+                    <option value="09:00 AM">09:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="01:00 PM">01:00 PM</option>
+                    <option value="02:00 PM">02:00 PM</option>
+                    <option value="03:00 PM">03:00 PM</option>
+                    <option value="04:00 PM">04:00 PM</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Additional Notes (Optional)</label>
+                <textarea id="message" name="message" placeholder="Any specific concerns or preferences..."></textarea>
+            </div>
+
+            <button type="submit">Book My Session</button>
+        </form>
+
+        <div class="loader" id="loader" style="display:none;">Submitting...</div>
+
+        <div class="confirmation" id="confirmation" style="display:none;">
+            <h2>Booking Received!</h2>
+            <p>Thank you for booking a session with us.</p>
+        </div>
+    </div>
+    <section class="two-column-section">
+
+        <!-- LEFT: Pastor Slideshow -->
+        <div class="left-column">
+            <h2>Our Church Leaders</h2>
+            <div class="leaders-slideshow">
+                <div class="leader-slide active">
+                    <div class="leader-card">
+                        <img src="images/Pastor Grace.jpg" alt="Pastor Grace">
+                        <h3>Pastor Grace Hiire</h3>
+                        <p>Senior Pastor</p>
+                    </div>
+                </div>
+                <div class="leader-slide">
+                    <div class="leader-card">
+                        <img src="images/Pastor.jpg" alt="Pastor Kennedy">
+                        <h3>Pastor Kennedy Hiire</h3>
+                        <p>Senior Pastor</p>
+                    </div>
+                </div>
+                <div class="slideshow-dots">
+                    <span class="dot active" onclick="goToLeader(0)"></span>
+                    <span class="dot" onclick="goToLeader(1)"></span>
+                </div>
+            </div>
+            <div class="staff-button-wrapper">
+                <a href="about.html" class="btn btn-church">View more about our church</a>
+            </div>
+        </div>
+
+        <!-- RIGHT: Testimonies Slideshow -->
+        <div class="right-column">
+            <h2>Testimonies</h2>
+            <div class="testimony-slideshow">
+                <div class="testimony-slide active">
+                    <div class="testimony-card">
+                        <img src="images/2.jpg" alt="Testimony">
+                        <div class="testimony-text">
+                            <p>"This church completely changed my life. The love and warmth I felt from day one made me
+                                feel at home."</p>
+                            <span class="testimony-name">— Sarah M.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimony-slide">
+                    <div class="testimony-card">
+                        <img src="images/3.jpg" alt="Testimony">
+                        <div class="testimony-text">
+                            <p>"The teachings here have strengthened my faith in ways I never imagined. God is truly at
+                                work in this place."</p>
+                            <span class="testimony-name">— James K.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimony-slide">
+                    <div class="testimony-card">
+                        <img src="images/1.jpg" alt="Testimony">
+                        <div class="testimony-text">
+                            <p>"Promised Land Christian Center gave me a community that prays together and grows
+                                together."</p>
+                            <span class="testimony-name">— Ruth A.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slideshow-dots">
+                    <span class="dot active" onclick="goToTestimony(0)"></span>
+                    <span class="dot" onclick="goToTestimony(1)"></span>
+                    <span class="dot" onclick="goToTestimony(2)"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="sermon-list">
+        <div class="sermon-item" data-series="faith" data-speaker="john" data-date="2023-06-04">
+            <div class="sermon-thumbnail">
+                <img src="images/faith.jpg" alt="Sermon Thumbnail">
+                <div class="play-button">▶</div>
+            </div>
+            <div class="sermon-details">
+                <h3>The Power of Faith</h3>
+                <p class="sermon-meta">Pastor Grace | June 4, 2023</p>
+                <p class="sermon-description">Exploring how faith can move mountains in our lives and in our
+                    community.</p>
+                <div class="sermon-actions">
+                    <a href="#" class="watch-button">Watch</a>
+                </div>
+            </div>
+        </div>
+        <a href="sermon.html" class="btn">Get more summons</a>
+    </section>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="me" style="color:aliceblue">Contact Us</h3>
+                <p><i class="fas fa-phone"></i> +256 744836784</p>
+                <p><i class="fas fa-phone"></i> +256 780914274</p>
+                <p><i class="fas fa-envelope"></i> promisedlandchc@gmail.com</p>
+            </div>
+            <div class="footer-section">
+                <h3 class="me1" style="color:aliceblue">Quick Links</h3>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="give.html">Give Online</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 class="me2" style="color:aliceblue">Follow us on</h3>
+                <div class="social-icons">
+                    <ul class="social-list">
+
+                        <a href="https://www.youtube.com/@PLCCGRACELOVE"><i class="fab fa-youtube"></i> PLCC
+                            GRACELOVE</a>
+                        <a href="https://www.tiktok.com/@gracelovehiire?_r=1&_t=ZM-929jctxKf0t"><i
+                                class="fab fa-tiktok"></i>
+                            gracelovehiire</a>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Promised Land Christian Center. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <div class="mobile-nav-overlay"></div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
