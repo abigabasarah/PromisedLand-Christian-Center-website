@@ -33,9 +33,10 @@ $fund_type = $conn->real_escape_string($_POST['fund_type'] ?? '');
 $real_name = $conn->real_escape_string($_POST['real_name'] ?? '');
 $is_anonymous = $conn->real_escape_string($_POST['is_anonymous'] ?? 'No');
 $payment_date = date('Y-m-d H:i:s');
+$other_fund = $conn->real_escape_string($_POST['other_fund'] ?? '');
 
 // Validate required fields
-if (empty($transaction_id) || empty($amount) || empty($donor_email)) {
+if (empty($transaction_id) || empty($amount)) {
     echo json_encode([
         'success' => false,
         'message' => 'Missing required fields'
@@ -59,11 +60,11 @@ if ($check_result->num_rows > 0) {
 $sql = "INSERT INTO donations 
         (transaction_id, flutterwave_id, amount, currency, payment_type, 
          donor_name, donor_email, donor_phone, fund_type, real_name, 
-         is_anonymous, payment_date, status) 
+         is_anonymous, payment_date, other_fund,status) 
         VALUES 
         ('$transaction_id', '$flutterwave_id', '$amount', '$currency', '$payment_type',
          '$donor_name', '$donor_email', '$donor_phone', '$fund_type', '$real_name',
-         '$is_anonymous', '$payment_date', 'completed')";
+         '$is_anonymous', '$payment_date','$other_fund', 'completed')";
 
 if ($conn->query($sql) === TRUE) {
     echo json_encode([

@@ -151,23 +151,25 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-
+                <div class="form-group" id="other-fund-group" style="display: none;">
+                    <label for="other-fund">Please specify <span style="color: red;">*</span></label>
+                    <textarea id="other-fund" name="other_fund" rows="3"
+                        placeholder="Tell us what this contribution is for..."></textarea>
+                </div>
                 <div class="form-group">
                     <label for="donor-name">Full Name</label>
                     <input type="text" id="donor-name" name="donor-name">
                 </div>
-
                 <div class="form-group">
-                    <label for="donor-email">Email Address</label>
-                    <input type="email" id="donor-email" name="donor-email">
+                    <label for="email">Your Email <span
+                            style="color: gray; font-size: 0.85em;">(optional)</span></label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address">
                 </div>
-
                 <div class="form-group">
                     <label for="donor-phone">Phone Number</label>
                     <input type="tel" id="donor-phone" name="donor-phone">
                     <small style="color: #666; font-size: 0.85em;"></small>
                 </div>
-
                 <div class="form-group">
                     <label>
                         <input type="checkbox" id="anonymous" name="anonymous">

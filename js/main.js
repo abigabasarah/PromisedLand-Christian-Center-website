@@ -101,45 +101,35 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
-//after 
-document.addEventListener("DOMContentLoaded", function () {
+// Animate home sections on scroll
+const homeSections = document.querySelectorAll('#church-section section');
+if (homeSections.length > 0) {
+    homeSections.forEach((section) => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(50px)';
+        section.style.transition = 'none';
+    });
 
-    function animateSections(selector) {
-        const sections = document.querySelectorAll(selector + ' section');
-        if (sections.length === 0) return;
-
-        // Step 1: hide all sections immediately with no transition
-        sections.forEach((section) => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(50px)';
-            section.style.transition = 'none';
+    setTimeout(() => {
+        homeSections.forEach((section, i) => {
+            section.style.transition = `opacity 0.7s ease ${i * 0.15}s, transform 0.7s ease ${i * 0.15}s`;
         });
 
-        // Step 2: wait for hidden state to paint, then attach observer
-        setTimeout(() => {
-            sections.forEach((section, i) => {
-                section.style.transition =
-                    `opacity 0.7s ease ${i * 0.15}s, transform 0.7s ease ${i * 0.15}s`;
+        const homeSectionsObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                } else {
+                    entry.target.style.opacity = '0';
+                    entry.target.style.transform = 'translateY(50px)';
+                }
             });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            sections.forEach(section => observer.observe(section));
-        }, 300);
-    }
-
-    animateSections('#church-section');
-    animateSections('#about-section');
-
-});
+        homeSections.forEach(section => homeSectionsObserver.observe(section));
+    }, 300);
+}
 // ======================
 // Booking Form
 // ======================
@@ -155,7 +145,9 @@ const confirmation = document.getElementById('confirmation');
 
 // Only run if elements exist (for pages that have the form)
 if (serviceTypeSelect && dateGroup && preferredDateInput) {
-
+    // Set minimum date to today
+    const todayDate = new Date().toISOString().split('T')[0];
+    preferredDateInput.setAttribute('min', todayDate);
     // Hide date field on page load
     dateGroup.style.display = 'none';
     preferredDateInput.removeAttribute('required');
@@ -260,7 +252,17 @@ if (serviceTypeSelect && dateGroup && preferredDateInput) {
 if (bookingForm) {
     bookingForm.addEventListener('submit', function (e) {
         e.preventDefault(); // STOP page redirect
-
+        // Phone validation
+        const phoneInput = bookingForm.querySelector('[name="phone"]');
+        const phoneError = document.getElementById('phoneError');
+        const phone = phoneInput.value.trim();
+        if (phone && (!/^0\d{9}$/.test(phone))) {
+            phoneError.style.display = 'block';
+            phoneInput.focus();
+            return;
+        } else {
+            phoneError.style.display = 'none';
+        }
         // Show loader
         bookingForm.style.display = 'none';
         loader.style.display = 'block';
@@ -281,6 +283,7 @@ if (bookingForm) {
                 // If PHP returns "SUCCESS", show success message
                 if (data.trim() === "SUCCESS") {
                     confirmation.style.display = 'block';
+                    confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
                     // Reset/restore form after 5 seconds
                     setTimeout(function () {
@@ -442,6 +445,26 @@ if (document.getElementById('series-filter')) {
     });
 }
 // ======================
+// Animate Steps on Scroll
+// ======================
+const steps = document.querySelectorAll('.step');
+if (steps.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, index * 200);
+            } else {
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+
+    steps.forEach(step => observer.observe(step));
+}
+// ======================
 // Contact Form
 // ======================
 const contactForm = document.getElementById('contactForm');
@@ -487,6 +510,20 @@ if (contactForm) {
         }
     });
 }
+//text area on give from
+document.getElementById('fund').addEventListener('change', function () {
+    const otherGroup = document.getElementById('other-fund-group');
+    const otherTextarea = document.getElementById('other-fund');
+
+    if (this.value === 'Other') {
+        otherGroup.style.display = 'block';
+        otherTextarea.required = true;   // makes it required only when visible
+    } else {
+        otherGroup.style.display = 'none';
+        otherTextarea.required = false;  // not required when hidden
+        otherTextarea.value = '';        // clears it if they switch away
+    }
+});
 // ======================
 // Giving Page - Flutterwave (REVERTED TO ORIGINAL CALLBACK STRUCTURE)
 // ======================

@@ -113,15 +113,15 @@
                 <label for="childName">Child's Name:</label>
                 <input type="text" id="childName" name="childName">
             </div>
-
             <div class="form-group">
-                <label for="email">Your Email</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                <label for="email">Your Email <span style="color: gray; font-size: 0.85em;">(optional)</span></label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
             </div>
-
             <div class="form-group">
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                <span id="phoneError" style="color: red; font-size: 0.85em; display:none;">Please enter a valid Ugandan
+                    phone number (e.g. 0703331189)</span>
             </div>
 
             <div class="form-group" id="dateGroup">

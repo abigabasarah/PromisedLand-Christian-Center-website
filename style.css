@@ -438,6 +438,22 @@ section {
     }
 }
 
+.fa-youtube {
+    color: #FF0000;
+}
+
+.fa-tiktok {
+    color: #010101;
+}
+
+/*.fa-phone {
+    color: #25D366;
+}
+
+.fa-envelope {
+    color: #EA4335;
+}*/
+
 .read-more-btn {
     color: goldenrod;
     font-weight: 600;
@@ -449,6 +465,15 @@ section {
 
 .read-more-btn:hover {
     color: #b8860b;
+}
+
+.history-img {
+    float: right;
+    width: 250px;
+    height: 300px;
+    margin: 0 0 15px 20px;
+    border-radius: 8px;
+    object-fit: cover;
 }
 
 .animate-hidden {
@@ -1309,20 +1334,70 @@ button[type="submit"]:active {
     display: flex;
     gap: 15px;
     margin-top: 20px;
-}
-
-.watch-button,
-.listen-button,
-.notes-button {
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-weight: 600;
+    flex-wrap: wrap;
+    /* so they wrap on small screens */
 }
 
 .watch-button {
-    background-color: var(--primary-color);
+    display: inline-block;
+    /* key fix — removes full-width stretching */
+    padding: 10px 20px;
+    background-color: #4a6fa5;
     color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
 }
+
+.subscribe-btn {
+    border-radius: 50px;
+    padding: 12px 30px;
+    animation: bounce 1.5s infinite, glow 2s infinite alternate;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.subscribe-btn:hover {
+    animation: none;
+    transform: scale(1.08);
+    box-shadow: 0 8px 25px rgba(230, 168, 0, 0.6);
+    cursor: pointer;
+}
+
+.subscribe-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    30% {
+        transform: translateY(-8px);
+    }
+
+    60% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 8px rgba(230, 168, 0, 0.4);
+    }
+
+    to {
+        box-shadow: 0 0 20px rgba(230, 168, 0, 0.9);
+    }
+}
+
 
 .listen-button {
     background-color: var(--accent-color);
@@ -1628,6 +1703,14 @@ button[type="submit"]:active {
     padding: 1.5rem;
     background: #f9f9f9;
     border-radius: 8px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.step.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .step-number {
