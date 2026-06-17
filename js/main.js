@@ -510,138 +510,222 @@ if (contactForm) {
         }
     });
 }
-//text area on give from
-document.getElementById('fund').addEventListener('change', function () {
-    const otherGroup = document.getElementById('other-fund-group');
-    const otherTextarea = document.getElementById('other-fund');
+//text area on give form
+const fundSelect = document.getElementById('fund');
+if (fundSelect) {
+    fundSelect.addEventListener('change', function () {
+        const otherGroup = document.getElementById('other-fund-group');
+        const otherTextarea = document.getElementById('other-fund');
 
-    if (this.value === 'Other') {
-        otherGroup.style.display = 'block';
-        otherTextarea.required = true;   // makes it required only when visible
-    } else {
-        otherGroup.style.display = 'none';
-        otherTextarea.required = false;  // not required when hidden
-        otherTextarea.value = '';        // clears it if they switch away
-    }
-});
+        if (this.value === 'Other') {
+            otherGroup.style.display = 'block';
+            otherTextarea.required = true;
+        } else {
+            otherGroup.style.display = 'none';
+            otherTextarea.required = false;
+            otherTextarea.value = '';
+        }
+    });
+}
 // ======================
-// Giving Page - Flutterwave (REVERTED TO ORIGINAL CALLBACK STRUCTURE)
+// Giving Page - RukaPay (server-verified flow)
 // ======================
+//
+// Key difference from the old Flutterwave version:
+// The browser NEVER declares a donation successful on its own. It submits
+// the form to create_payment.php, then polls check_status.php, which only
+// ever reflects what webhook.php has recorded after RukaPay itself confirms
+// payment. This closes the gap where someone could fake a "success" callback
+// in their browser console and have it recorded as a real donation.
+
 const givingForm = document.getElementById("givingForm");
+
 if (givingForm) {
     givingForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        // Collect form data (existing code)
         const amount = document.getElementById("amount").value;
         const fund = document.getElementById("fund").value;
+        const otherFund = document.getElementById("other-fund")?.value || "";
         const name = document.getElementById("donor-name").value;
-        const email = document.getElementById("donor-email").value;
+        const email = document.getElementById("email").value;
         const phone = document.getElementById("donor-phone").value;
         const anonymous = document.getElementById("anonymous").checked;
 
-        // ... (existing validation code) ...
+        // ---- Client-side validation (still needed for UX, but the server re-validates everything) ----
         if (!amount || amount <= 0) {
             alert("Please enter a valid amount.");
             return;
         }
-
-        if (amount > 50000) {
-            alert("Test mode is limited to 50,000 UGX. For larger donations, please contact the church office or wait until we go live.");
-            return;
-        }
-
         if (!fund || fund === "Select contribution") {
             alert("Please select a contribution type.");
             return;
         }
-
-        if (!name || !email || !phone) {
+        if (fund === "Other" && !otherFund.trim()) {
+            alert("Please specify what this contribution is for.");
+            return;
+        }
+        if (!name || !phone) {
             alert("Please fill in all required fields.");
             return;
         }
-        // ... (end existing validation code) ...
 
-        FlutterwaveCheckout({
-            public_key: "FLWPUBK_TEST-b5eaf98eefd6c916c2f6d46c97879334-X",
-            tx_ref: "donation-" + Date.now(),
-            amount: amount,
-            currency: "UGX",
-            payment_options: "card, mobilemoneyuganda",
+        const submitButton = givingForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
-            customer: {
-                email: email,
-                phone_number: phone,
-                name: anonymous ? "Anonymous Donor" : name,
-            },
+        const formData = new FormData();
+        formData.append('amount', amount);
+        formData.append('fund', fund);
+        formData.append('other_fund', otherFund);
+        formData.append('donor_name', name);
+        formData.append('donor_email', email);
+        formData.append('donor_phone', phone);
+        formData.append('anonymous', anonymous ? 'true' : 'false');
 
-            meta: {
-                fund_type: fund,
-                real_name: name,
-                anonymous: anonymous ? "Yes" : "No"
-            },
+        fetch('create_payment.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || "Something went wrong. Please try again.");
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                    return;
+                }
 
-            customizations: {
-                title: "Church Online Giving",
-                description: "Donation to " + fund,
-                logo: "https://yourchurchlogo.com/logo.png"
-            },
+                // If RukaPay needs the user to be redirected to complete payment
+                // (e.g. a hosted checkout page), send them there.
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                    return;
+                }
 
-            callback: function (payment) {
-                console.log("Payment successful:", payment);
-
-                // Save donation to database (Existing Fetch Logic)
-                const donationData = new FormData();
-                donationData.append('transaction_id', payment.tx_ref);
-                // ... (append other data) ...
-
-                fetch('save_donation.php', {
-                    method: 'POST',
-                    body: donationData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Donation saved:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error saving donation:', error);
-                    });
-
-                // Hide the form
-                givingForm.style.display = 'none';
-
-                // Show thank you message
-                const thankYouMessage = document.createElement('div');
-                thankYouMessage.className = 'thank-you-message';
-                thankYouMessage.innerHTML = `
-                    <div class="success-icon">✓</div>
-                    <h2>Thank You for Your Generosity!</h2>
-                    <p>Your donation of <strong>UGX ${parseInt(amount).toLocaleString()}</strong> to <strong>${fund}</strong> has been received.</p>
-                    <p>Transaction Reference: <strong>${payment.transaction_id}</strong></p>
-                    <p class="blessing">May God bless you abundantly for your faithful giving!</p>
-                    
-                                        <button onclick="location.reload()" class="cta-button">Make Another Donation</button>
-                    
-                    <button onclick="location.reload()" class="back-button">
-                        Return to Giving Page
-                    </button>
-                `;
-
-                // Insert thank you message after the form
-                givingForm.parentNode.insertBefore(thankYouMessage, givingForm.nextSibling);
-
-                // Scroll to thank you message
-                thankYouMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            },
-
-            onclose: function () {
-                console.log("Payment modal closed");
-                // Re-show the form if the user closed the modal before payment
-                givingForm.style.display = 'block';
-            }
-        });
+                // Otherwise, assume a mobile money push was sent to their phone.
+                // Show a "waiting for confirmation" state and poll for the real result.
+                showWaitingState(amount, fund);
+                pollDonationStatus(data.reference, amount, fund);
+            })
+            .catch(error => {
+                console.error('Error creating payment:', error);
+                alert("Could not connect to the server. Please check your connection and try again.");
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            });
     });
 }
+
+function showWaitingState(amount, fund) {
+    givingForm.style.display = 'none';
+
+    const waitingMessage = document.createElement('div');
+    waitingMessage.className = 'waiting-message';
+    waitingMessage.id = 'waitingMessage';
+    waitingMessage.innerHTML = `
+        <div class="spinner-icon"><i class="fas fa-spinner fa-spin"></i></div>
+        <h2>Confirming Your Payment...</h2>
+        <p>Please check your phone and approve the mobile money prompt.</p>
+        <p>Amount: <strong>UGX ${parseInt(amount).toLocaleString()}</strong> to <strong>${fund}</strong></p>
+        <p style="color:#666; font-size: 0.9em;">This page will update automatically once payment is confirmed.</p>
+    `;
+    givingForm.parentNode.insertBefore(waitingMessage, givingForm.nextSibling);
+    waitingMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/**
+ * Polls check_status.php until the server-confirmed status is no longer
+ * "pending". Stops after a reasonable timeout so users aren't stuck forever
+ * if something goes wrong.
+ */
+function pollDonationStatus(reference, amount, fund, attempt = 0) {
+    const MAX_ATTEMPTS = 30;   // ~2.5 minutes at 5s intervals
+    const POLL_INTERVAL_MS = 5000;
+
+    if (attempt >= MAX_ATTEMPTS) {
+        showTimeoutState(reference);
+        return;
+    }
+
+    fetch(`check_status.php?reference=${encodeURIComponent(reference)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                // Keep polling - transient errors shouldn't kill the flow immediately.
+                setTimeout(() => pollDonationStatus(reference, amount, fund, attempt + 1), POLL_INTERVAL_MS);
+                return;
+            }
+
+            if (data.status === 'completed') {
+                showThankYouMessage(reference, data.amount, data.fund_type);
+            } else if (data.status === 'failed') {
+                showFailedState();
+            } else {
+                // Still pending - keep polling.
+                setTimeout(() => pollDonationStatus(reference, amount, fund, attempt + 1), POLL_INTERVAL_MS);
+            }
+        })
+        .catch(error => {
+            console.error('Error checking status:', error);
+            setTimeout(() => pollDonationStatus(reference, amount, fund, attempt + 1), POLL_INTERVAL_MS);
+        });
+}
+
+function showThankYouMessage(reference, amount, fund) {
+    const waitingMessage = document.getElementById('waitingMessage');
+    if (waitingMessage) waitingMessage.remove();
+
+    const thankYouMessage = document.createElement('div');
+    thankYouMessage.className = 'thank-you-message';
+    thankYouMessage.innerHTML = `
+        <div class="success-icon">✓</div>
+        <h2>Thank You for Your Generosity!</h2>
+        <p>Your donation of <strong>UGX ${parseInt(amount).toLocaleString()}</strong> to <strong>${fund}</strong> has been received.</p>
+        <p>Transaction Reference: <strong>${reference}</strong></p>
+        <p class="blessing">May God bless you abundantly for your faithful giving!</p>
+        <button onclick="location.reload()" class="cta-button">Make Another Donation</button>
+    `;
+    givingForm.parentNode.insertBefore(thankYouMessage, givingForm.nextSibling);
+    thankYouMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function showFailedState() {
+    const waitingMessage = document.getElementById('waitingMessage');
+    if (waitingMessage) waitingMessage.remove();
+
+    const failedMessage = document.createElement('div');
+    failedMessage.className = 'failed-message';
+    failedMessage.innerHTML = `
+        <div class="failed-icon">✗</div>
+        <h2>Payment Not Completed</h2>
+        <p>It looks like the payment wasn't approved or didn't go through.</p>
+        <button onclick="location.reload()" class="cta-button">Try Again</button>
+    `;
+    givingForm.parentNode.insertBefore(failedMessage, givingForm.nextSibling);
+    failedMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function showTimeoutState(reference) {
+    const waitingMessage = document.getElementById('waitingMessage');
+    if (waitingMessage) waitingMessage.remove();
+
+    const timeoutMessage = document.createElement('div');
+    timeoutMessage.className = 'timeout-message';
+    timeoutMessage.innerHTML = `
+        <h2>Still Waiting...</h2>
+        <p>We haven't received confirmation yet. If you completed the payment on your phone,
+           it may just be taking a little longer than usual - your donation will still be recorded
+           once confirmed.</p>
+        <p>Your reference number is: <strong>${reference}</strong></p>
+        <p>If you're unsure, please contact the church office with this reference.</p>
+        <button onclick="location.reload()" class="cta-button">Back to Giving Page</button>
+    `;
+    givingForm.parentNode.insertBefore(timeoutMessage, givingForm.nextSibling);
+    timeoutMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 // ======================
 // New Here Page (FAQ)
 // ======================
