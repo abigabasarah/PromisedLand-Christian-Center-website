@@ -50,7 +50,11 @@ if (!empty($phone) && !preg_match('/^0\d{9}$/', $phone)) {
     echo "Error: Invalid phone number. Must be 10 digits starting with 0.";
     exit;
 }
-
+// Email validation (optional field, but if provided must be valid)
+if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo "Error: Invalid email address.";
+    exit;
+}
 // Date validation
 if (!empty($preferredDate) && $preferredDate !== '0000-00-00') {
     $today = date('Y-m-d');

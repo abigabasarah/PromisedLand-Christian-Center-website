@@ -99,17 +99,22 @@
                     </div>
                 </div>
             </div>
-
             <div class="contact-form-container">
                 <h2>Send Us a Message</h2>
                 <form class="contact-form" id="contactForm" method="POST" action="submit_contact.php">
                     <div class="form-group"><label for="name">Name</label><input type="text" id="name" name="name"
                             required>
                     </div>
-                    <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email"
-                            required></div>
-                    <div class="form-group"><label for="phone">Phone (optional)</label><input type="tel" id="phone"
-                            name="phone"></div>
+                    <div class="form-group">
+                        <label for="email">Email <span style="color: gray; font-size: 0.85em;">(optional)</span></label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                        <span id="phoneError" style="color: red; font-size: 0.85em; display:none;">Please enter a valid
+                            Ugandan phone number (e.g. 0703331189)</span>
+                    </div>
                     <div class="form-group"><label for="subject">Subject</label><select id="subject" name="subject">
                             <option value="general">General Inquiry</option>
                             <option value="prayer">Prayer Request</option>

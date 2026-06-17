@@ -468,9 +468,39 @@ if (steps.length > 0) {
 // Contact Form
 // ======================
 const contactForm = document.getElementById('contactForm');
+const phoneInput = document.getElementById('phone');
+const phoneError = document.getElementById('phoneError');
+
+function validatePhone() {
+    const phonePattern = /^0\d{9}$/;
+    const value = phoneInput.value.trim();
+
+    if (value === '' || !phonePattern.test(value)) {
+        phoneError.style.display = 'block';
+        return false;
+    } else {
+        phoneError.style.display = 'none';
+        return true;
+    }
+}
+
+if (phoneInput) {
+    phoneInput.addEventListener('blur', validatePhone);
+    phoneInput.addEventListener('input', () => {
+        if (phoneError.style.display === 'block') {
+            validatePhone();
+        }
+    });
+}
+
 if (contactForm) {
     contactForm.addEventListener('submit', async function (e) {
         e.preventDefault(); // Prevent page reload
+
+        // Stop here if phone is invalid
+        if (!validatePhone()) {
+            return;
+        }
 
         const formData = new FormData(this);
         const successMessage = document.getElementById('successMessage');

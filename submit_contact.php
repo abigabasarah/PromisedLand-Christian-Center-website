@@ -26,10 +26,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subject = $_POST['subject'] ?? 'general';
     $message = trim($_POST['message'] ?? '');
 
-    if ($phone === '') { $phone = null; }
+     // Phone is required
+    if ($phone === '') {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Phone number is required.'
+        ]);
+        exit;
+    }
+
+    // Phone format validation
+    if (!preg_match('/^0\d{9}$/', $phone)) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid phone number. Must be 10 digits starting with 0.'
+        ]);
+        exit;
+    }
+
+// Email validation (optional, but must be valid if provided)
+    if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid email address.'
+        ]);
+        exit;
+    }
+
+    if ($email === '') { $email = null; }
 
     $sql = "INSERT INTO contact_us (name, email, phone, subject, message) 
             VALUES (:name, :email, :phone, :subject, :message)";
+   
 
     try {
         $stmt = $pdo->prepare($sql);
