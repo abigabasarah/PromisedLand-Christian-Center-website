@@ -152,6 +152,7 @@ header {
     z-index: 1000;
 }
 
+
 .mobile-menu-btn {
     display: none;
 }
@@ -500,8 +501,8 @@ section {
 
 .about-leaders-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -511,8 +512,9 @@ section {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    align-items: stretch;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -522,21 +524,26 @@ section {
     border-left: 4px solid gold;
 }
 
-.about-leader-card img {
+.about-leader-image img {
     width: 100%;
-    height: 200px;
+    height: 100%;
+    min-height: 280px;
     object-fit: cover;
     object-position: top;
+    display: block;
 }
 
 .about-leader-info {
-    padding: 15px;
+    padding: 20px;
     text-align: left;
     border-top: 3px solid goldenrod;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .about-leader-info h3 {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #333;
     margin-bottom: 4px;
 }
@@ -544,25 +551,30 @@ section {
 .about-leader-role {
     color: goldenrod;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     margin-bottom: 8px;
 }
 
 .about-leader-bio {
     color: #6c757d;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     line-height: 1.6;
 }
 
 @media (max-width: 1024px) {
     .about-leaders-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 600px) {
-    .about-leaders-grid {
+    .about-leader-card {
         grid-template-columns: 1fr;
+    }
+
+    .about-leader-image img {
+        height: 250px;
+        min-height: unset;
     }
 }
 
@@ -770,6 +782,18 @@ section {
 
 .tiktok-btn i {
     font-size: 1.3rem;
+}
+
+/* YouTube */
+.youtube-btn {
+    background: linear-gradient(45deg, #00f2ea, #ff0050);
+    color: #ff0000;
+    border: 2px solid #ff0000;
+}
+
+.youtube-btn:hover {
+    background: linear-gradient(45deg, #00f2ea, #ff0050);
+    color: white;
 }
 
 .meet-btn {
