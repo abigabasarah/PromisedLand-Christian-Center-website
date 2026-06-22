@@ -150,6 +150,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
+    height: 80px;
 }
 
 
@@ -2033,8 +2034,12 @@ button[type="submit"]:active {
 
         /* Show logo on mobile */
         .desktop-nav {
-            display: block !important;
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 10px 0;
+            height: 80px;
         }
 
         .desktop-nav .logo {
